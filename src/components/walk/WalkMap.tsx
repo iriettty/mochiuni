@@ -45,7 +45,7 @@ export function WalkMap({ positions, isTracking, dogColor }: WalkMapProps) {
                 zoom={16}
                 scrollWheelZoom={false}
                 zoomControl={false}
-                className="w-full h-full absolute inset-0 rounded-3xl"
+                className="w-full h-[350px] sm:h-[450px] absolute inset-0 rounded-3xl"
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

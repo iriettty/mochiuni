@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-type DogType = "mochi" | "uni";
+export type DogType = "mochi" | "uni";
 
 interface DogContextType {
   activeDog: DogType;

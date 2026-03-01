@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useDog } from "@/components/providers/DogProvider";
+import { useWalkManager } from "@/components/providers/WalkProvider";
 import { Play, Square, MapPin } from "lucide-react";
 
 // Dynamically import the map to avoid SSR issues with Leaflet
@@ -19,74 +20,32 @@ export default function WalkTracker() {
     const { activeDog, dogData } = useDog();
     const data = dogData[activeDog];
 
-    const [isTracking, setIsTracking] = useState(false);
-    const [positions, setPositions] = useState<[number, number][]>([]);
-    const [distance, setDistance] = useState(0); // in km
-    const [startTime, setStartTime] = useState<number | null>(null);
-    const [duration, setDuration] = useState(0); // in seconds
+    const { walkData, dispatch } = useWalkManager();
+    const currentWalk = walkData[activeDog];
 
-    const watchIdRef = useRef<number | null>(null);
+    // Local tick for duration display
+    const [displayDuration, setDisplayDuration] = useState(currentWalk.duration);
 
-    // Timer effect
     useEffect(() => {
         let interval: NodeJS.Timeout;
-        if (isTracking && startTime) {
+        if (currentWalk.isTracking && currentWalk.startTime) {
             interval = setInterval(() => {
-                setDuration(Math.floor((Date.now() - startTime) / 1000));
+                setDisplayDuration(Math.floor((Date.now() - currentWalk.startTime!) / 1000));
             }, 1000);
+        } else {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setDisplayDuration(currentWalk.duration);
         }
         return () => clearInterval(interval);
-    }, [isTracking, startTime]);
-
-    const calculateDistance = (pos1: [number, number], pos2: [number, number]) => {
-        // Haversine formula
-        const R = 6371; // km
-        const dLat = (pos2[0] - pos1[0]) * Math.PI / 180;
-        const dLon = (pos2[1] - pos1[1]) * Math.PI / 180;
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(pos1[0] * Math.PI / 180) * Math.cos(pos2[0] * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    };
+    }, [currentWalk.isTracking, currentWalk.startTime, currentWalk.duration]);
 
     const toggleTracking = () => {
-        if (isTracking) {
+        if (currentWalk.isTracking) {
             // Stop tracking
-            setIsTracking(false);
-            if (watchIdRef.current !== null) {
-                navigator.geolocation.clearWatch(watchIdRef.current);
-                watchIdRef.current = null;
-            }
+            dispatch({ type: "STOP_TRACKING", dogId: activeDog });
         } else {
             // Start tracking
-            if (!navigator.geolocation) {
-                alert("Geolocation is not supported by your browser");
-                return;
-            }
-
-            setStartTime(Date.now());
-            setIsTracking(true);
-
-            watchIdRef.current = navigator.geolocation.watchPosition(
-                (position) => {
-                    const newPos: [number, number] = [position.coords.latitude, position.coords.longitude];
-                    setPositions(prev => {
-                        if (prev.length > 0) {
-                            const dist = calculateDistance(prev[prev.length - 1], newPos);
-                            setDistance(d => d + dist);
-                        }
-                        return [...prev, newPos];
-                    });
-                },
-                (error) => {
-                    console.error("Geolocation error:", error);
-                    alert("Error getting location: " + error.message);
-                    setIsTracking(false);
-                },
-                { enableHighAccuracy: true, maximumAge: 0 }
-            );
+            dispatch({ type: "START_TRACKING", dogId: activeDog, startTime: Date.now() });
         }
     };
 
@@ -111,31 +70,31 @@ export default function WalkTracker() {
             <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-center">
                     <span className="text-3xl font-black text-slate-800 tracking-tighter">
-                        {distance.toFixed(2)}
+                        {currentWalk.distance.toFixed(2)}
                     </span>
                     <span className="text-xs font-bold text-slate-400">キロメートル</span>
                 </div>
 
                 <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-center">
                     <span className="text-3xl font-black text-slate-800 tracking-tighter">
-                        {formatTime(duration)}
+                        {formatTime(displayDuration)}
                     </span>
                     <span className="text-xs font-bold text-slate-400">経過時間</span>
                 </div>
             </div>
 
-            <div className="flex-1 w-full bg-slate-100 rounded-3xl overflow-hidden shadow-sm border border-slate-100 min-h-[300px] relative">
-                <WalkMap positions={positions} isTracking={isTracking} dogColor={data.color} />
+            <div className="flex-1 w-full bg-slate-100 rounded-3xl overflow-hidden shadow-sm border border-slate-100 min-h-[350px] relative">
+                <WalkMap positions={currentWalk.positions} isTracking={currentWalk.isTracking} dogColor={data.color} />
 
                 <div className="absolute bottom-4 left-0 right-0 flex justify-center z-[1000]">
                     <button
                         onClick={toggleTracking}
-                        className={`flex items-center space-x-2 px-6 py-4 rounded-full font-bold text-white shadow-lg transition-transform active:scale-95 ${isTracking
+                        className={`flex items-center space-x-2 px-6 py-4 rounded-full font-bold text-white shadow-lg transition-transform active:scale-95 ${currentWalk.isTracking
                             ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/30'
                             : 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/30'
                             }`}
                     >
-                        {isTracking ? (
+                        {currentWalk.isTracking ? (
                             <>
                                 <Square fill="currentColor" strokeWidth={0} size={20} />
                                 <span>終了</span>
@@ -150,9 +109,9 @@ export default function WalkTracker() {
                 </div>
             </div>
 
-            {positions.length > 0 && !isTracking && (
+            {currentWalk.positions.length > 0 && !currentWalk.isTracking && (
                 <button
-                    onClick={() => { setPositions([]); setDistance(0); setDuration(0); }}
+                    onClick={() => dispatch({ type: "RESET", dogId: activeDog })}
                     className="text-xs font-semibold text-slate-400 hover:text-slate-600 self-center py-2"
                 >
                     リセット

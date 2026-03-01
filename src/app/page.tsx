@@ -2,18 +2,22 @@
 
 import React from "react";
 import { useDog } from "@/components/providers/DogProvider";
-import { Activity, Bone, Map, Clock } from "lucide-react";
+import { Activity, Bone, Map, Clock, Navigation } from "lucide-react";
+import { useWalkLogs } from "@/hooks/useWalkLogs";
+import { RandomAvatar } from "@/components/layout/RandomAvatar";
 
 export default function Home() {
   const { activeDog, dogData } = useDog();
   const data = dogData[activeDog];
+  const { todayLogs } = useWalkLogs();
+
+  const totalWalkDistance = todayLogs.reduce((acc, log) => acc + log.distance, 0);
+  const hasWalkedToday = todayLogs.length > 0;
 
   return (
     <div className="flex flex-col space-y-6 pb-6 animate-fade-in">
       <section className="mt-2 text-center flex flex-col items-center">
-        <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-4 shadow-sm ${data.color} transition-colors duration-500`}>
-          {data.emoji}
-        </div>
+        <RandomAvatar />
         <h2 className="text-2xl font-bold text-slate-800">こんにちは、{data.name}！</h2>
         <p className="text-sm text-slate-500 font-medium">今日も一緒に楽しく過ごそうね</p>
       </section>
@@ -29,11 +33,13 @@ export default function Home() {
         </div>
 
         <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex flex-col items-center justify-center space-y-2 active:scale-95 transition-transform">
-          <div className="bg-emerald-50 text-emerald-500 p-3 rounded-2xl w-full flex justify-center mb-1">
-            <Map strokeWidth={2.5} />
+          <div className={`${hasWalkedToday ? 'bg-emerald-500 text-white' : 'bg-emerald-50 text-emerald-500'} p-3 rounded-2xl w-full flex justify-center mb-1 transition-colors`}>
+            {hasWalkedToday ? <Navigation strokeWidth={2.5} /> : <Map strokeWidth={2.5} />}
           </div>
           <span className="text-xs font-bold text-slate-600">お散歩</span>
-          <span className="text-[10px] text-slate-400">準備OK</span>
+          <span className="text-[10px] text-slate-400">
+            {hasWalkedToday ? `本日 ${totalWalkDistance.toFixed(2)}km` : '準備OK'}
+          </span>
         </div>
 
         <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex flex-col items-center justify-center space-y-2 active:scale-95 transition-transform">

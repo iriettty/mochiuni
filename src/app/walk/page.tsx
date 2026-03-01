@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useDog } from "@/components/providers/DogProvider";
 import { useWalkManager } from "@/components/providers/WalkProvider";
-import { Play, Square, MapPin } from "lucide-react";
+import { useWalkLogs } from "@/hooks/useWalkLogs";
+import { Play, Square, MapPin, CheckCircle2 } from "lucide-react";
 
 // Dynamically import the map to avoid SSR issues with Leaflet
 const WalkMap = dynamic(() => import("@/components/walk/WalkMap").then(mod => mod.WalkMap), {
@@ -22,6 +23,7 @@ export default function WalkTracker() {
 
     const { walkData, dispatch } = useWalkManager();
     const currentWalk = walkData[activeDog];
+    const { addWalkLog, todayLogs } = useWalkLogs();
 
     // Local tick for duration display
     const [displayDuration, setDisplayDuration] = useState(currentWalk.duration);
@@ -53,6 +55,17 @@ export default function WalkTracker() {
         const m = Math.floor(secs / 60).toString().padStart(2, '0');
         const s = (secs % 60).toString().padStart(2, '0');
         return `${m}:${s}`;
+    };
+
+    const handleSaveAndReset = () => {
+        if (currentWalk.distance > 0 || currentWalk.duration > 0) {
+            addWalkLog({
+                startTime: currentWalk.startTime || Date.now(),
+                duration: currentWalk.duration,
+                distance: currentWalk.distance
+            });
+        }
+        dispatch({ type: "RESET", dogId: activeDog });
     };
 
     return (
@@ -97,12 +110,12 @@ export default function WalkTracker() {
                         {currentWalk.isTracking ? (
                             <>
                                 <Square fill="currentColor" strokeWidth={0} size={20} />
-                                <span>終了</span>
+                                <span>一時停止</span>
                             </>
                         ) : (
                             <>
                                 <Play fill="currentColor" size={20} />
-                                <span>出発</span>
+                                <span>{currentWalk.positions.length > 0 ? '再開' : '出発'}</span>
                             </>
                         )}
                     </button>
@@ -111,11 +124,44 @@ export default function WalkTracker() {
 
             {currentWalk.positions.length > 0 && !currentWalk.isTracking && (
                 <button
-                    onClick={() => dispatch({ type: "RESET", dogId: activeDog })}
-                    className="text-xs font-semibold text-slate-400 hover:text-slate-600 self-center py-2"
+                    onClick={handleSaveAndReset}
+                    className="flex items-center justify-center space-x-2 w-full py-4 bg-slate-800 text-white rounded-2xl font-bold shadow-md active:scale-95 transition-transform"
                 >
-                    リセット
+                    <CheckCircle2 size={18} />
+                    <span>計測を終了して記録する</span>
                 </button>
+            )}
+
+            {/* Today's Walks */}
+            {todayLogs.length > 0 && (
+                <div className="mt-4 animate-fade-in">
+                    <h3 className="text-sm font-bold text-slate-800 mb-2">今日の記録</h3>
+                    <div className="space-y-2">
+                        {todayLogs.map(log => (
+                            <div key={log.id} className="bg-white p-3 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100">
+                                <div className="flex items-center space-x-3">
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${data.color} text-white`}>
+                                        <MapPin size={14} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-bold text-slate-800">
+                                            {new Date(log.startTime).toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' })} ~
+                                        </span>
+                                        <span className="text-[10px] text-slate-400 font-medium">完了</span>
+                                    </div>
+                                </div>
+                                <div className="flex space-x-4 text-right">
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-black text-slate-800">{log.distance.toFixed(2)}<span className="text-[10px] font-medium text-slate-400 ml-1">km</span></span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-black text-slate-800">{formatTime(log.duration)}<span className="text-[10px] font-medium text-slate-400 ml-1">分</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             )}
         </div>
     );

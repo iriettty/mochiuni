@@ -9,10 +9,10 @@ export function BottomNav() {
     const pathname = usePathname();
 
     const navItems = [
-        { icon: Home, label: "Home", href: "/" },
-        { icon: MapPin, label: "Walk", href: "/walk" },
-        { icon: Calendar, label: "Calendar", href: "/calendar" },
-        { icon: Settings, label: "Settings", href: "/settings" },
+        { icon: Home, label: "ホーム", href: "/" },
+        { icon: MapPin, label: "お散歩", href: "/walk" },
+        { icon: Calendar, label: "カレンダー", href: "/calendar" },
+        { icon: Settings, label: "設定", href: "/settings" },
     ];
 
     return (

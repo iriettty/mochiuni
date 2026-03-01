@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { Dog } from "lucide-react";
 
 export type DogType = "mochi" | "uni";
 
@@ -11,7 +12,7 @@ interface DogContextType {
     [key in DogType]: {
       name: string;
       breed: string;
-      emoji: string;
+      emoji: React.ReactNode;
       color: string;
     };
   };
@@ -19,15 +20,15 @@ interface DogContextType {
 
 const defaultDogData = {
   mochi: {
-    name: "Mochi",
+    name: "もち",
     breed: "Japanese Spitz",
-    emoji: "☁️", // Spitz are fluffy like clouds
+    emoji: <Dog size={24} color="#ffffff" fill="#ffffff" />,
     color: "bg-slate-100 text-slate-900 border-slate-200",
   },
   uni: {
-    name: "Uni",
+    name: "うに",
     breed: "Pug",
-    emoji: "🐾",
+    emoji: <Dog size={24} color="#1e293b" fill="#1e293b" />,
     color: "bg-amber-100 text-amber-900 border-amber-200",
   }
 };

@@ -43,6 +43,12 @@ export function useWalkLogs() {
     const todayStr = new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD format
     const todayLogs = activeDogLogs.filter((log) => log.date === todayStr);
 
+    // Calculate recent 7 walks average distance
+    const recent7Logs = [...activeDogLogs].sort((a, b) => b.startTime - a.startTime).slice(0, 7);
+    const recent7AvgDistance = recent7Logs.length > 0
+        ? recent7Logs.reduce((acc, log) => acc + log.distance, 0) / recent7Logs.length
+        : 0;
+
     const addWalkLog = (walk: Omit<WalkLog, "id" | "dogId" | "date">) => {
         const newLog: WalkLog = {
             ...walk,
@@ -61,6 +67,8 @@ export function useWalkLogs() {
         logs: activeDogLogs,
         allDogLogs: logs,
         todayLogs,
+        recent7AvgDistance,
+        recent7LogsCount: recent7Logs.length,
         addWalkLog,
         deleteWalkLog,
         isLoaded,

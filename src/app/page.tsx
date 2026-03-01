@@ -9,7 +9,7 @@ import { RandomAvatar } from "@/components/layout/RandomAvatar";
 export default function Home() {
   const { activeDog, dogData } = useDog();
   const data = dogData[activeDog];
-  const { todayLogs } = useWalkLogs();
+  const { todayLogs, recent7AvgDistance, recent7LogsCount } = useWalkLogs();
 
   const totalWalkDistance = todayLogs.reduce((acc, log) => acc + log.distance, 0);
   const hasWalkedToday = todayLogs.length > 0;
@@ -39,6 +39,7 @@ export default function Home() {
           <span className="text-xs font-bold text-slate-600">お散歩</span>
           <span className="text-[10px] text-slate-400">
             {hasWalkedToday ? `本日 ${totalWalkDistance.toFixed(2)}km` : '準備OK'}
+            {recent7LogsCount > 0 && <span className="block text-[8px] text-slate-300 mt-1">直近平均 {recent7AvgDistance.toFixed(2)}km</span>}
           </span>
         </div>
 

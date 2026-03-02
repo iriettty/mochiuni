@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { put } from '@vercel/blob';
 
 export async function POST(req: Request) {
     try {
@@ -12,24 +11,17 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: '入力内容が正しくありません' }, { status: 400 });
         }
 
-        const buffer = Buffer.from(await file.arrayBuffer());
+        // Generate unique filename
+        const originalName = file.name || "";
+        const ext = originalName.includes('.') ? originalName.substring(originalName.lastIndexOf('.')) : '.jpg';
+        const filename = `${dog}/${Date.now()}${ext}`; // Organize by folder in blob
 
-        // Ensure the directory exists
-        const dir = path.join(process.cwd(), 'public', 'images', dog);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
+        // Upload to Vercel Blob
+        const blob = await put(filename, file, {
+            access: 'public',
+        });
 
-        // Attempt to keep original extension, fallback to .jpg
-        const originalName = file.name || 'image.jpg';
-        const ext = path.extname(originalName) || '.jpg';
-
-        // Generate unique filename and write to disk
-        const filename = `${Date.now()}${ext}`;
-        const filepath = path.join(dir, filename);
-        fs.writeFileSync(filepath, buffer);
-
-        return NextResponse.json({ success: true, filename });
+        return NextResponse.json({ success: true, url: blob.url });
     } catch (err) {
         console.error('Upload Error:', err);
         return NextResponse.json({ error: 'アップロードに失敗しました' }, { status: 500 });

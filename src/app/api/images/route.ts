@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { list } from '@vercel/blob';
+
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
@@ -12,26 +12,24 @@ export async function GET(request: Request) {
     }
 
     try {
-        const dir = path.join(process.cwd(), 'public', 'images', dog);
-        if (!fs.existsSync(dir)) {
-            return NextResponse.json({ image: null });
-        }
+        const { blobs } = await list({
+            prefix: `${dog}/`,
+        });
 
-        const files = fs.readdirSync(dir);
         // Filter out common web-viewable image extensions (Exclude HEIC/HEIF)
-        const imageFiles = files.filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file));
+        const imageBlobs = blobs.filter(blob => /\.(jpg|jpeg|png|gif|webp)$/i.test(blob.pathname));
 
-        if (imageFiles.length === 0) {
+        if (imageBlobs.length === 0) {
             return NextResponse.json({ image: null });
         }
 
-        // Pick a random image
-        const randomImage = imageFiles[Math.floor(Math.random() * imageFiles.length)];
+        // Pick a random image blob
+        const randomBlob = imageBlobs[Math.floor(Math.random() * imageBlobs.length)];
 
-        // Return relative path from public root
-        return NextResponse.json({ image: `/images/${dog}/${randomImage}` });
+        // Return blob url
+        return NextResponse.json({ image: randomBlob.url });
     } catch (error) {
-        console.error('Error reading image directory:', error);
+        console.error('Error listing blobs:', error);
         return NextResponse.json({ error: 'Failed to load images' }, { status: 500 });
     }
 }

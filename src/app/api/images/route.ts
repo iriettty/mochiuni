@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -17,7 +18,7 @@ export async function GET(request: Request) {
         }
 
         const files = fs.readdirSync(dir);
-        // Filter out common image extensions
+        // Filter out common web-viewable image extensions (Exclude HEIC/HEIF)
         const imageFiles = files.filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file));
 
         if (imageFiles.length === 0) {

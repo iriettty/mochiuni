@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# User uploaded images
+/public/images/mochi/*
+!/public/images/mochi/.gitkeep
+/public/images/uni/*
+!/public/images/uni/.gitkeep

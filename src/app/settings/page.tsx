@@ -26,7 +26,10 @@ export default function SettingsPage() {
         setMessage(null);
 
         const formData = new FormData();
-        formData.append("file", file);
+        // Force ASCII filename to prevent parsing errors in Next.js / Undici with Japanese filenames
+        const originalName = file.name || "";
+        const ext = originalName.includes('.') ? originalName.substring(originalName.lastIndexOf('.')) : '.jpg';
+        formData.append("file", file, "image" + ext);
         formData.append("dog", selectedDog);
 
         try {
@@ -45,8 +48,8 @@ export default function SettingsPage() {
                 const data = await res.json();
                 setMessage({ text: data.error || "アップロードに失敗しました", type: "error" });
             }
-        } catch {
-            setMessage({ text: "エラーが発生しました", type: "error" });
+        } catch (error: any) {
+            setMessage({ text: `エラーが発生しました: ${error?.message || error}`, type: "error" });
         } finally {
             setUploading(false);
         }
@@ -90,7 +93,7 @@ export default function SettingsPage() {
                         <input
                             id="file-upload"
                             type="file"
-                            accept="image/*"
+                            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                             onChange={handleFileChange}
                             className="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors cursor-pointer"
                         />

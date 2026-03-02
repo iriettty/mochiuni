@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         }
 
         // Attempt to keep original extension, fallback to .jpg
-        const originalName = file.name;
+        const originalName = file.name || 'image.jpg';
         const ext = path.extname(originalName) || '.jpg';
 
         // Generate unique filename and write to disk

@@ -12,11 +12,12 @@ export function RandomAvatar() {
         // Fetch random image
         const fetchImage = async () => {
             try {
-                const res = await fetch(`/api/images?dog=${activeDog}`);
+                const timestamp = Date.now();
+                const res = await fetch(`/api/images?dog=${activeDog}&t=${timestamp}`);
                 if (res.ok) {
                     const json = await res.json();
                     if (json.image) {
-                        setImageUrl(json.image);
+                        setImageUrl(`${json.image}?t=${timestamp}`);
                         return;
                     }
                 }

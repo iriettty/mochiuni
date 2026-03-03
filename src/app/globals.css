@@ -3,15 +3,21 @@
 @theme {
   --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular;
-  
-  --color-mochi: #f8fafc; /* slate-50 */
-  --color-mochi-dark: #cbd5e1; /* slate-300 */
-  --color-mochi-text: #0f172a; /* slate-900 */
-  
-  --color-uni: #fef3c7; /* amber-50 */
-  --color-uni-dark: #fcd34d; /* amber-300 */
-  --color-uni-text: #78350f; /* amber-900 */
-  
+
+  --color-mochi: #f8fafc;
+  /* slate-50 */
+  --color-mochi-dark: #cbd5e1;
+  /* slate-300 */
+  --color-mochi-text: #0f172a;
+  /* slate-900 */
+
+  --color-uni: #fef3c7;
+  /* amber-50 */
+  --color-uni-dark: #fcd34d;
+  /* amber-300 */
+  --color-uni-text: #78350f;
+  /* amber-900 */
+
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -22,7 +28,15 @@
   }
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior-y: none;
   background-color: var(--background);
   color: var(--foreground);
 }
@@ -33,13 +47,25 @@ body {
 
 /* Base animations for smooth route transitions and element pop-ins */
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slide-up {
-  from { transform: translateY(10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .animate-fade-in {

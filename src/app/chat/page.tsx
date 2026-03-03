@@ -11,34 +11,66 @@ export default function ChatPage() {
     const data = dogData[activeDog];
     const router = useRouter();
 
-    const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    const { messages, setMessages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
         api: "/api/chat",
         body: {
             data: { dogId: activeDog }
         },
-        initialMessages: [
-            {
-                id: "welcome",
-                role: "assistant",
-                content: `こんにちは！${data.name}ちゃんの健康や育成に関する専門AIアシスタントです。何か気になることはありますか？ 何でもご相談ください！`,
-            }
-        ]
+        onError: (error) => {
+            console.error("Chat Error:", error);
+        }
     });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [isMounted, setIsMounted] = useState(false);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     useEffect(() => {
+        setIsMounted(true);
+        const saved = localStorage.getItem(`chat_${activeDog}`);
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.length > 0) {
+                    setMessages(parsed);
+                    return;
+                }
+            } catch (e) {
+                console.error("Failed to parse chat history", e);
+            }
+        }
+
+        setMessages([
+            {
+                id: "welcome",
+                role: "assistant",
+                content: `こんにちは！${data.name}ちゃんの健康や育成に関する専門AIアシスタントです。何か気になることはありますか？ 何でもご相談ください！`,
+            }
+        ]);
+    }, [activeDog, data.name, setMessages]);
+
+    useEffect(() => {
+        if (!isMounted) return;
+        if (messages.length > 0) {
+            localStorage.setItem(`chat_${activeDog}`, JSON.stringify(messages));
+        }
         scrollToBottom();
-    }, [messages]);
+    }, [messages, activeDog, isMounted, error]);
+
+    if (!isMounted) {
+        return <div className="flex-1 flex items-center justify-center text-slate-400">読み込み中...</div>;
+    }
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 relative animate-fade-in -mx-4 -my-6 sm:-mx-0 sm:-my-0">
+        <div
+            className="fixed inset-x-0 mx-auto max-w-md z-30 flex flex-col bg-slate-50 overflow-hidden shadow-sm sm:rounded-xl border-x border-slate-100 animate-fade-in"
+            style={{ top: "64px", bottom: "calc(64px + env(safe-area-inset-bottom))" }}
+        >
             {/* Chat Header */}
-            <div className="bg-white px-4 py-3 shadow-sm border-b border-slate-100 flex items-center space-x-3 z-10">
+            <div className="bg-white px-4 py-3 shadow-sm flex items-center space-x-3 z-10 border-b border-slate-100 shrink-0">
                 <button
                     onClick={() => router.back()}
                     className="p-2 -ml-2 text-slate-400 hover:text-slate-600 rounded-full transition-colors"
@@ -57,7 +89,7 @@ export default function ChatPage() {
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0 pb-4">
                 {messages.map((m) => (
                     <div
                         key={m.id}
@@ -93,20 +125,30 @@ export default function ChatPage() {
                     </div>
                 )}
 
+                {error && (
+                    <div className="bg-red-50 text-red-600 text-xs p-3 rounded-lg border border-red-100 shadow-sm mt-4 text-center">
+                        現在API制限（無料枠上限）によりAIが一時的に回答できません。しばらく時間をおいてから再度お試しください。
+                    </div>
+                )}
+
                 <div ref={messagesEndRef} className="h-2" />
             </div>
 
             {/* Chat Input */}
-            <div className="bg-white p-4 border-t border-slate-100 pb-8 sm:pb-4">
+            <div className="bg-white p-3 border-t border-slate-100 shrink-0">
                 <form
-                    onSubmit={handleSubmit}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubmit(e);
+                    }}
                     className="flex items-center space-x-2"
                 >
                     <input
                         value={input}
                         onChange={handleInputChange}
                         placeholder={`${data.name}について質問する...`}
-                        className="flex-1 bg-slate-50 text-slate-700 text-sm rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-slate-200 border border-slate-100"
+                        className="flex-1 bg-slate-50 text-slate-700 text-base rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-slate-200 border border-slate-100"
+                        style={{ fontSize: "16px" }}
                         disabled={isLoading}
                     />
                     <button

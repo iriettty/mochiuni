@@ -18,9 +18,9 @@ export async function POST(req: Request) {
 
         const systemInstruction = getSystemInstruction(dogId);
 
-        // Call the Gemini 2.0 Flash model via Vercel AI SDK
+        // Call the Gemini 2.5 Flash model via Vercel AI SDK
         const result = await streamText({
-            model: google('gemini-2.0-flash'),
+            model: google('gemini-2.5-flash'),
             system: systemInstruction,
             messages,
             temperature: 0.7, // Add a slightly creative but focused temperature

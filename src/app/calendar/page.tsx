@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useDog } from "@/components/providers/DogProvider";
 import { useEvents, CalendarEvent, EventType } from "@/hooks/useEvents";
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalIcon, Clock, Stethoscope, Scissors } from "lucide-react";
+import { RandomAvatar } from "@/components/layout/RandomAvatar";
 
 const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month + 1, 0).getDate();
@@ -107,8 +108,8 @@ export default function CalendarPage() {
                     <h2 className="text-2xl font-bold text-slate-800">ヘルスケア</h2>
                     <p className="text-sm text-slate-500 font-medium">{data.name}のスケジュール</p>
                 </div>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-sm ${data.color}`}>
-                    {data.emoji}
+                <div className="w-12 h-12 shadow-sm rounded-full overflow-hidden">
+                    <RandomAvatar useSmall={true} />
                 </div>
             </div>
 

@@ -6,6 +6,7 @@ import { useDog } from "@/components/providers/DogProvider";
 import { useWalkManager } from "@/components/providers/WalkProvider";
 import { useWalkLogs } from "@/hooks/useWalkLogs";
 import { Play, Square, MapPin, CheckCircle2 } from "lucide-react";
+import { RandomAvatar } from "@/components/layout/RandomAvatar";
 
 // Dynamically import the map to avoid SSR issues with Leaflet
 const WalkMap = dynamic(() => import("@/components/walk/WalkMap").then(mod => mod.WalkMap), {
@@ -75,8 +76,8 @@ export default function WalkTracker() {
                     <h2 className="text-2xl font-bold text-slate-800">お散歩トラッカー</h2>
                     <p className="text-sm text-slate-500 font-medium">{data.name}の冒険</p>
                 </div>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-sm ${data.color}`}>
-                    {data.emoji}
+                <div className="w-12 h-12 shadow-sm rounded-full overflow-hidden">
+                    <RandomAvatar useSmall={true} />
                 </div>
             </div>
 

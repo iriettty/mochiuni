@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useDog } from "@/components/providers/DogProvider";
-import { Activity, Bone, Map, Clock, Navigation } from "lucide-react";
+import { Activity, Bone, Map, Clock, Navigation, Bot } from "lucide-react";
 import { useWalkLogs } from "@/hooks/useWalkLogs";
 import { useEvents } from "@/hooks/useEvents";
 import { RandomAvatar } from "@/components/layout/RandomAvatar";
@@ -113,6 +113,26 @@ export default function Home() {
           </div>
           <span className="text-xs font-bold text-slate-600">写真を見る</span>
           <span className="text-[10px] text-slate-400">ギャラリー</span>
+        </div>
+      </div>
+
+      {/* AI Chat Button */}
+      <div
+        onClick={() => window.location.href = '/chat'}
+        className="bg-indigo-600 rounded-[2rem] p-5 shadow-lg shadow-indigo-200 flex items-center justify-between cursor-pointer active:scale-95 transition-transform mt-4 relative overflow-hidden"
+      >
+        <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="flex items-center space-x-4 relative z-10">
+          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-sm">
+            <Bot size={24} strokeWidth={2.5} />
+          </div>
+          <div>
+            <h3 className="font-bold text-white text-lg">専門家に相談 (AI)</h3>
+            <p className="text-indigo-100 text-xs font-medium">{data.name}専用のサポート窓口</p>
+          </div>
+        </div>
+        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white relative z-10 backdrop-blur-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6" /></svg>
         </div>
       </div>
 

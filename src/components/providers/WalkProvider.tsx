@@ -74,36 +74,41 @@ function walkReducer(state: WalkProviderState, action: WalkAction): WalkProvider
                 [action.dogId]: { ...defaultWalkState },
             };
         case "ADD_POSITION": {
-            const newState = { ...state };
             let anyChanged = false;
 
-            (["mochi", "uni"] as DogType[]).forEach((dogId) => {
-                if (newState[dogId].isTracking) {
-                    anyChanged = true;
-                    const prevPositions = newState[dogId].positions;
-                    let newDistance = newState[dogId].distance;
-
-                    if (prevPositions.length > 0) {
-                        newDistance += calculateDistance(
-                            prevPositions[prevPositions.length - 1],
-                            action.position
-                        );
-                    }
-
-                    const newDuration = Math.floor(
-                        (action.timeNow - (newState[dogId].startTime || action.timeNow)) / 1000
-                    );
-
-                    newState[dogId] = {
-                        ...newState[dogId],
-                        positions: [...prevPositions, action.position],
-                        distance: newDistance,
-                        duration: newDuration,
-                    };
+            const nextMochi = { ...state.mochi };
+            if (nextMochi.isTracking) {
+                anyChanged = true;
+                if (nextMochi.positions.length > 0) {
+                    const lastPos = nextMochi.positions[nextMochi.positions.length - 1];
+                    nextMochi.distance += calculateDistance(lastPos, action.position);
                 }
-            });
+                nextMochi.positions = [...nextMochi.positions, action.position];
+                nextMochi.duration = Math.floor(
+                    (action.timeNow - (nextMochi.startTime || action.timeNow)) / 1000
+                );
+            }
 
-            return anyChanged ? newState : state;
+            const nextUni = { ...state.uni };
+            if (nextUni.isTracking) {
+                anyChanged = true;
+                if (nextUni.positions.length > 0) {
+                    const lastPos = nextUni.positions[nextUni.positions.length - 1];
+                    nextUni.distance += calculateDistance(lastPos, action.position);
+                }
+                nextUni.positions = [...nextUni.positions, action.position];
+                nextUni.duration = Math.floor(
+                    (action.timeNow - (nextUni.startTime || action.timeNow)) / 1000
+                );
+            }
+
+            if (!anyChanged) return state;
+
+            return {
+                ...state,
+                mochi: nextMochi,
+                uni: nextUni
+            };
         }
         default:
             return state;

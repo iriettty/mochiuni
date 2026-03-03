@@ -196,6 +196,19 @@ export default function CalendarPage() {
                             className="w-full bg-slate-50 rounded-2xl p-4 mb-4 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-slate-200 border border-slate-100"
                         />
 
+                        {newEventTitle.includes("手術") && (
+                            <>
+                                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1 mt-2">安静期間（日数）</p>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    placeholder="例：3"
+                                    id="recoveryDaysInput"
+                                    className="w-full bg-slate-50 rounded-2xl p-4 mb-4 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-slate-200 border border-slate-100"
+                                />
+                            </>
+                        )}
+
                         <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">カテゴリ</p>
                         <div className="grid grid-cols-4 gap-2 mb-6">
                             {(['vet', 'meds', 'grooming', 'other'] as EventType[]).map(type => (
@@ -221,7 +234,21 @@ export default function CalendarPage() {
                                 キャンセル
                             </button>
                             <button
-                                onClick={handleAddEvent}
+                                onClick={() => {
+                                    const recInput = document.getElementById('recoveryDaysInput') as HTMLInputElement;
+                                    const recDays = recInput ? parseInt(recInput.value || "0", 10) : undefined;
+
+                                    if (!selectedDate || !newEventTitle) return;
+                                    addEvent({
+                                        date: selectedDate,
+                                        title: newEventTitle,
+                                        type: newEventType,
+                                        completed: false,
+                                        ...(recDays ? { recoveryDays: recDays } : {})
+                                    });
+                                    setNewEventTitle("");
+                                    setIsModalOpen(false);
+                                }}
                                 className="flex-[2] py-4 rounded-2xl font-bold bg-slate-800 text-white active:bg-slate-900 transition-colors shadow-lg"
                             >
                                 保存

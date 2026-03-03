@@ -12,6 +12,7 @@ export interface CalendarEvent {
     type: EventType;
     title: string;
     notes?: string;
+    recoveryDays?: number; // Added for tracking surgical recovery periods
     completed: boolean;
 }
 

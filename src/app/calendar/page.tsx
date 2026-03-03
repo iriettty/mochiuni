@@ -184,7 +184,7 @@ export default function CalendarPage() {
 
             {/* Add Event Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex flex-col items-center justify-end sm:justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className="fixed inset-0 z-50 flex flex-col items-center justify-end sm:justify-center p-4 pb-24 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
                     <div className="bg-white rounded-[2rem] p-6 w-full max-w-sm shadow-2xl animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
                         <h3 className="font-bold text-xl text-slate-800 mb-4">カレンダーに追加</h3>
                         <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">イベント名</p>

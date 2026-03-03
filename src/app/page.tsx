@@ -38,6 +38,10 @@ export default function Home() {
       healthStatus = "ちょっとストレス";
       healthColor = "text-amber-500";
       healthBg = "bg-amber-50";
+    } else {
+      healthStatus = "良好";
+      healthColor = "text-blue-500";
+      healthBg = "bg-blue-50";
     }
   }
 

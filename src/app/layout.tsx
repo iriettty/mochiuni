@@ -30,7 +30,7 @@ export default function RootLayout({
           <WalkProvider>
             <div className="max-w-md mx-auto h-[100dvh] bg-white shadow-xl shadow-neutral-200/50 relative overflow-hidden flex flex-col">
               <Header />
-              <main className="flex-1 w-full flex flex-col pt-4 px-4 overflow-y-auto overflow-x-hidden pb-safe pb-24">
+              <main className="flex-1 min-h-0 w-full flex flex-col pt-4 px-4 overflow-y-auto overflow-x-hidden pb-safe pb-24">
                 {children}
               </main>
               <BottomNav />

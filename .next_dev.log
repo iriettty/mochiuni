@@ -1,0 +1,145 @@
+
+> wanlog-app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://100.64.1.48:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 808ms
+ GET /settings 200 in 1645ms (compile: 1545ms, render: 100ms)
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json',
+  page: '/'
+}
+[Error: ETIMEDOUT: connection timed out, write] {
+  errno: -60,
+  code: 'ETIMEDOUT',
+  syscall: 'write'
+}
+⨯ uncaughtException: [Error: ETIMEDOUT: connection timed out, write] {
+  errno: -60,
+  code: 'ETIMEDOUT',
+  syscall: 'write'
+}
+⨯ uncaughtException:  [Error: ETIMEDOUT: connection timed out, write] {
+  errno: -60,
+  code: 'ETIMEDOUT',
+  syscall: 'write'
+}
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json',
+  page: '/'
+}
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+ GET / 500 in 2.1s (compile: 2.0s, render: 14ms)
+ GET / 500 in 2.1s (compile: 2.0s, render: 14ms)
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json',
+  page: '/'
+}
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json',
+  page: '/'
+}
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+ GET / 500 in 516ms (compile: 503ms, render: 13ms)
+ GET / 500 in 516ms (compile: 503ms, render: 13ms)
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json',
+  page: '/chat'
+}
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json',
+  page: '/chat'
+}
+⨯ Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+Error: ENOENT: no such file or directory, open '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+    at ignore-listed frames {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/yukiirie/Desktop/ペット管理アプリ/.next/dev/routes-manifest.json'
+}
+ GET /chat 500 in 2.7s (compile: 2.6s, render: 15ms)
+ GET /chat 500 in 2.7s (compile: 2.6s, render: 15ms)
+[?25h

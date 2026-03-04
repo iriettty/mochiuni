@@ -70,7 +70,7 @@ export default function WalkTracker() {
     };
 
     return (
-        <div className="flex flex-col h-full space-y-4 pb-6 animate-fade-in relative flex-1">
+        <div className="flex flex-col space-y-4 pb-6 animate-fade-in relative">
             <div className="flex justify-between items-end mb-2">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-800">お散歩トラッカー</h2>
